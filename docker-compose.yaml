@@ -1,0 +1,48 @@
+version: '4'
+
+services:
+  postgres:
+    build:
+      context: ./db 
+      dockerfile: Dockerfile
+    container_name: jem_assement_db
+    environment:
+      POSTGRES_USER: jemUser
+      POSTGRES_PASSWORD: jemUser123
+      POSTGRES_DB: jem_assessment_poc
+    ports:
+      - "5432:5432"
+    networks:
+      - my_network
+
+  redis:
+    image: "redis:latest"
+    container_name: jem_assessment_redis
+    ports:
+      - "6379:6379"
+    networks:
+      - my_network
+    volumes:
+      - redis_volume_data:/data
+
+  python_app:
+    build:
+      context: .
+    container_name: my_python_app
+    ports:
+      - 8003:80
+    depends_on:
+      - postgres
+    networks:
+      - my_network
+    volumes:
+      - ./src:/usr/app/src
+
+
+volumes:
+  redis_volume_data:
+  redis_insight_volume_data:
+
+networks:
+  my_network:
+    driver: bridge
