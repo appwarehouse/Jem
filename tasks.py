@@ -2,9 +2,8 @@
 
 from celery import Celery
 from celery.utils.log import get_task_logger
-from datetime import datetime, timedelta
-from sqlalchemy import create_engine, Column, Integer, String, DateTime, Boolean, ForeignKey
-from sqlalchemy.orm import sessionmaker, declarative_base
+from datetime import datetime
+from sqlalchemy.orm import  declarative_base
 from models import Announcement, Message
 from db import get_db
 import random

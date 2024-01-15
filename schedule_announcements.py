@@ -22,4 +22,3 @@ def create_messages_for_announcement(announcement_id, session):
     except Exception as e:
         print(f"Error creating messages for announcement: {e}")
 
-# Rest of your code remains unchanged

@@ -37,7 +37,6 @@ def process_scheduled_jobs():
                     session.commit()
     
     except Exception as e:
-        # Handle exceptions (log, print, etc.)
         print(f"Error processing scheduled jobs: {e}")
     finally:
         if session:

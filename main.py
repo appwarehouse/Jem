@@ -4,13 +4,13 @@ from datetime import datetime
 from sqlalchemy.orm import declarative_base, Session
 from models import Announcement
 from db import get_db
+from typing import Optional
 
 app = FastAPI()
 Base = declarative_base()
 
 
 class AnnouncementBase(BaseModel):
-    id : int
     run_status: str
     scheduled_time: datetime
     announcement_message: str
@@ -23,3 +23,10 @@ def create_announcement(announcement: AnnouncementBase, db: Session = Depends(ge
     db.commit()
     db.refresh(db_announcement)
     return db_announcement
+
+@app.get("/")
+def index():
+    return {
+        "success": True,
+        "message": "Leggo"
+    }
