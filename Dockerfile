@@ -1,9 +1,9 @@
-FROM python:3.8
 
-RUN useradd -ms /bin/bash appuser
-USER appuser
-WORKDIR /usr/app/src
-COPY requirements.txt .
+FROM python:3.8-slim-buster
+ENV PYTHONUNBUFFERED=1
+WORKDIR /app
+COPY requirements.txt requirements.txt
+RUN pip3 install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
-COPY . .
-CMD ["python", "main.py"]
+COPY . ./app
+EXPOSE 8000

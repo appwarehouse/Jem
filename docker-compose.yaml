@@ -1,5 +1,3 @@
-version: '4'
-
 services:
   postgres:
     build:
@@ -25,19 +23,32 @@ services:
     volumes:
       - redis_volume_data:/data
 
-  python_app:
-    build:
-      context: .
-    container_name: my_python_app
+  pyapp:
+    container_name: pyapp
+    build: .
+    command: bash -c "uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
+    volumes:
+      - .:/app
     ports:
-      - 8003:80
+      - 8000:8000
+    restart: always
     depends_on:
       - postgres
     networks:
       - my_network
-    volumes:
-      - ./src:/usr/app/src
 
+  jem_celery_worker:
+    container_name: jem_celery_worker
+    build: .
+    command: celery -A celery_worker.celery worker --loglevel=info
+    volumes:
+      - .:/app
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+      - pyapp
 
 volumes:
   redis_volume_data:

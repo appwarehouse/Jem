@@ -7,7 +7,7 @@ from models import Announcement
 from models import Message
 from db import get_db
 
-celery = Celery('job', broker='redis://localhost:6379/0', backend='redis://localhost:6379/0', include=['tasks'])
+celery = Celery('job', broker='redis://localhost:6379/0', backend='redis://localhost:6379/0', include=['job'])
 
 @celery.task(name='job.process_scheduled_jobs')
 def process_scheduled_jobs():
@@ -44,7 +44,7 @@ def process_scheduled_jobs():
 
 celery.conf.beat_schedule = {
     'process-announcements-every-5-minutes': {
-        'task': 'tasks.process_announcements',
+        'task': 'job.process_scheduled_jobs',
         'schedule': timedelta(minutes=5),
     },
 }
